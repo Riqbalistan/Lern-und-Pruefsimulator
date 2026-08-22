@@ -1,0 +1,28 @@
+# Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# .NET
+backend/bin/
+backend/obj/
+
+# VS Code / Visual Studio
+.vs/
+.vscode/
+
+# Lokale Dateien
+*.user
+*.suo
+
+# ZIP-Sicherungen
+backend_App_13_07.zip
+frontend_App_13_07.zip
+
+# Betriebssystem
+Thumbs.db
+.DS_Store
+
+# Umgebungsvariablen
+.env
+.env.*

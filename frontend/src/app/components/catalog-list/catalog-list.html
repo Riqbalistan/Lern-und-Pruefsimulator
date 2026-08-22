@@ -1,0 +1,48 @@
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+
+  @for (catalog of catalogs(); track catalog.id) {
+
+    <div class="col">
+
+      <div
+        class="card h-100 shadow-sm catalog-card"
+        [class.border-primary]="selectedCatalogId === catalog.id"
+        [class.border-3]="selectedCatalogId === catalog.id"
+        (click)="selectCatalog(catalog.id)">
+
+        <div class="card-body d-flex flex-column justify-content-between">
+
+          <div class="text-center">
+
+            <h5 class="card-title">
+              {{ catalog.name }}
+            </h5>
+
+            <small class="text-muted">
+              LPIC-1 Fragenkatalog
+            </small>
+
+          </div>
+
+          <div class="d-grid gap-2 mt-4">
+
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              (click)="$event.stopPropagation(); selectCatalog(catalog.id)">
+
+              <i class="bi bi-list-ul"></i>
+              Fragen
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

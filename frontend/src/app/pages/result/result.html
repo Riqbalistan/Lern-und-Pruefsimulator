@@ -1,0 +1,122 @@
+<div class="container mt-5">
+
+  <div class="card shadow">
+
+    <div class="card-body text-center">
+
+      <h2>
+        Prüfung beendet
+      </h2>
+
+      <hr>
+
+      <h4>
+        Punkte
+      </h4>
+
+      <h1>
+        {{ points }} / {{ totalQuestions }}
+      </h1>
+
+      <h3>
+        {{ percentage }} %
+      </h3>
+
+      <div class="row mt-4 justify-content-center">
+
+        <div class="col-md-3">
+
+          <div class="card border-success">
+
+            <div class="card-body">
+
+              <h5>
+                Richtig
+              </h5>
+
+              <h2>
+                {{ correctAnswers }}
+              </h2>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+          <div class="card border-danger">
+
+            <div class="card-body">
+
+              <h5>
+                Falsch
+              </h5>
+
+              <h2>
+                {{ wrongAnswers }}
+              </h2>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+            <div class="mt-4">
+
+        @if (percentage >= 80) {
+
+          <div class="alert alert-success">
+
+            Sehr gute Leistung!
+
+          </div>
+
+        } @else if (percentage >= 60) {
+
+          <div class="alert alert-warning">
+
+            Bestanden.
+
+          </div>
+
+        } @else {
+
+          <div class="alert alert-danger">
+
+            Leider nicht bestanden.
+
+          </div>
+
+        }
+
+      </div>
+
+      <div class="mt-4">
+
+        <button
+          class="btn btn-primary me-2"
+          (click)="restart()">
+
+          Neue Prüfung starten
+
+        </button>
+
+        <button
+          class="btn btn-secondary"
+          (click)="finish()">
+
+          Beenden
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

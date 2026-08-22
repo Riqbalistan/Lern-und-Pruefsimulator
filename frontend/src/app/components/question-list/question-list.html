@@ -1,0 +1,42 @@
+<div class="mb-3">
+
+  <button
+    class="btn btn-outline-secondary"
+    (click)="goHome()">
+
+    ← Hauptmenü
+
+  </button>
+
+</div>
+
+<div class="list-group shadow">
+
+  @for (question of questions(); track question.id) {
+
+    <button
+      type="button"
+      class="list-group-item list-group-item-action p-3"
+      (click)="openQuestion(question.id)">
+
+      <div class="d-flex justify-content-between align-items-center">
+
+        <div class="text-start">
+
+          {{ question.questionText }}
+
+        </div>
+
+        <span class="text-primary">
+
+          →
+
+        </span>
+
+      </div>
+
+    </button>
+
+  }
+
+</div>

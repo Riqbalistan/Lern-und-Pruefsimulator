@@ -1,0 +1,319 @@
+@if (question(); as q) {
+
+<div class="container mt-4">
+
+  <div class="card shadow">
+
+    <div class="card-body">
+
+      <h2 class="card-title mb-4">
+        Frage
+      </h2>
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <span class="badge bg-primary fs-6">
+
+          Frage {{ currentQuestionNumber() }}
+          von
+          {{ questionOrder.length }}
+
+        </span>
+
+        @if (timeLimitEnabled) {
+
+        <span class="badge bg-danger fs-6">
+
+        ⏱ {{ formattedTime() }}
+
+        </span>
+
+      }
+
+</div>
+
+      <p class="fs-5">
+
+        {{ q.questionText }}
+
+      </p>
+
+      @if (q.hint) {
+
+        <button
+          class="btn btn-sm btn-outline-info mb-3"
+          (click)="toggleHint()">
+
+          @if (showHint()) {
+
+            💡 Hinweis ausblenden
+
+          } @else {
+
+            💡 Hint anzeigen
+
+          }
+
+        </button>
+
+        @if (showHint()) {
+
+          <div class="alert alert-info">
+
+            <strong>Hinweis:</strong>
+
+            <br>
+
+            {{ q.hint }}
+
+          </div>
+
+        }
+
+      }
+
+      <!-- Multiple Choice -->
+
+      @if (q.type === 'mc') {
+
+        <div class="alert alert-primary">
+
+          <h5 class="mb-2">
+
+            ☑ Multiple Choice
+
+          </h5>
+
+          Bitte wählen Sie geanu
+          <strong>
+            genau {{ requiredAnswers() }}
+          </strong>
+          Antworten aus.
+
+        </div>
+
+        @for (answer of q.answers; track answer.id) {
+
+          <div class="form-check mb-2">
+
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [checked]="isSelected(answer.id)"
+              [disabled]="checked()"
+              (change)="toggleAnswer(
+                answer.id,
+                $any($event.target).checked
+              )">
+
+            <label
+              class="form-check-label"
+              [style.color]="checked()
+                ? (
+                    answer.isCorrect
+                      ? 'green'
+                      : (
+                          isSelected(answer.id)
+                            ? 'red'
+                            : 'black'
+                        )
+                  )
+                : 'black'">
+
+              {{ answer.answerText }}
+
+            </label>
+
+          </div>
+
+        }
+
+      }
+            <!-- Single Choice -->
+
+      @if (q.type === 'sc') {
+
+        <div class="alert alert-success">
+
+          <h5 class="mb-2">
+
+            ◉ Single Choice (eine richtige Antwort)
+
+          </h5>
+
+          Bitte wählen Sie
+          <strong>genau eine</strong>
+          Antwort aus.
+
+        </div>
+
+        @for (answer of q.answers; track answer.id) {
+
+          <div class="form-check mb-2">
+
+            <input
+              class="form-check-input"
+              type="radio"
+              name="singleChoice"
+              [checked]="isSelected(answer.id)"
+              [disabled]="checked()"
+              (change)="selectSingle(answer.id)">
+
+            <label
+              class="form-check-label"
+              [style.color]="checked()
+                ? (
+                    answer.isCorrect
+                      ? 'green'
+                      : (
+                          isSelected(answer.id)
+                            ? 'red'
+                            : 'black'
+                        )
+                  )
+                : 'black'">
+
+              {{ answer.answerText }}
+
+            </label>
+
+          </div>
+
+        }
+
+      }
+
+      <!-- Fill In -->
+
+      @if (q.type === 'fi') {
+
+        <div class="alert alert-warning">
+
+          <h5 class="mb-2">
+
+            ⌨ Fill-In (Freitext)
+
+          </h5>
+
+          Bitte geben Sie die richtige Antwort ein.
+
+        </div>
+
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Antwort eingeben"
+          [ngModel]="fillInAnswer()"
+          (ngModelChange)="fillInAnswer.set($event)"
+          [disabled]="checked()">
+
+      }
+
+      @if (isLearnMode())  {
+
+        <div class="mt-4">
+
+          <button
+            class="btn btn-primary"
+            (click)="checkAnswer()"
+            [disabled]="checked() || !canCheckAnswer()">
+
+            Antwort prüfen
+
+          </button>
+
+        </div>
+
+      }
+
+      @if (isLearnMode() && checked()) {
+
+        <div class="mt-4">
+
+          @if (isCorrect()) {
+
+            <div class="alert alert-success">
+
+              ✔ Richtige Antwort
+
+            </div>
+
+          } @else {
+
+            <div class="alert alert-danger">
+
+              ✘ Leider falsch
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+      <hr>
+
+      <div class="d-flex justify-content-between">
+
+        <button
+          class="btn btn-outline-secondary"
+          (click)="previousQuestion()"
+          [disabled]="currentIndex === 0">
+
+          ← Vorherige
+
+        </button>
+
+        <button
+          class="btn btn-outline-primary"
+          (click)="nextQuestion()"
+          [disabled]="
+            isLearnMode()
+              ? (!checked() && !canCheckAnswer())
+              : false
+          ">
+
+          @if (currentIndex === questionOrder.length - 1) {
+
+            Ergebnis →
+
+          } @else {
+
+            Nächste →
+
+          }
+
+        </button>
+
+      </div>
+
+      <hr>
+
+      <div class="d-flex gap-2 flex-wrap">
+
+        <button
+          class="btn btn-secondary"
+          (click)="goToCatalog()">
+
+          Zur Fragenliste
+
+        </button>
+
+        <button
+          class="btn btn-dark"
+          (click)="goToHome()">
+
+          Startseite
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+}
